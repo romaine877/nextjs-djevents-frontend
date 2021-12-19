@@ -1,16 +1,27 @@
 import Layout from "@/components/Layout";
+import Modal from "@/components/Modal";
 import { useState } from "react";
+import Image from "next/image";
 import styles from "@/styles/Form.module.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_URL } from "@/config/index";
 import { useRouter } from "next/router";
 import moment from 'moment'
+import { FaImage } from "react-icons/fa";
+import ImageUpload from "@/components/ImageUpload";
 
 export default function EditEventPage({event}) {
 
   
     const router = useRouter()
+
+    const imageUpload = async(e) =>{
+      const res = await fetch(`${API_URL}/events/${event.id}`)
+      const data = await res.json()
+      setImagePreview(data.image.formats.thumbnail.url)
+      setShowModal(false)
+    }
 
 
   const handleSubmit = async(e) => {
@@ -67,6 +78,14 @@ export default function EditEventPage({event}) {
     performers: event.performers,
     description: event.description,
   });
+
+  const [showModal, setShowModal] = useState(false)
+
+
+    const [imagePreview, setImagePreview] = useState(event.image ? event.image.formats.thumbnail.url : null)
+
+
+
   return (
     <Layout title="Edit Event">
       <h1>Add Event</h1>
@@ -154,6 +173,14 @@ export default function EditEventPage({event}) {
           />
         </div>
       </form>
+      <div>
+        <h3>Image</h3>
+        {imagePreview ? <Image src={imagePreview} width={170} height={100} />: <div> <p>No image available</p></div>}
+        <div><button onClick={()=> setShowModal(true)} className="btn-secondary"><FaImage/> Upload Image</button></div>
+      </div>
+      <Modal show={showModal} onClose={()=> setShowModal(false)}>
+        <ImageUpload eventId={event.id} imageUpload={imageUpload}/>
+      </Modal>
     </Layout>
   );
 }
