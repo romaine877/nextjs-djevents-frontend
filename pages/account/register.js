@@ -1,16 +1,23 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { FaUser } from "react-icons/fa"
 import Link from "next/link"
 import Layout from "@/components/Layout"
 import styles from "@/styles/Auth.module.css"
 import { toast, ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
+import AuthContext from "@/context/AuthContext"
 
 
 export default function RegisterPage() {
+    const {register,error} = useContext(AuthContext)
+
+
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const [confirmPassword, setConfirmPassword] = useState()
+    const [username, setUsername] = useState()
+
+
     const handleSubmit = (e) =>{
         e.preventDefault()
         if(password!=confirmPassword){
@@ -23,9 +30,12 @@ export default function RegisterPage() {
                 draggable: true,
                 progress: undefined,
                 });
+                return
         }
-        console.log(email, password)
+        register({username, email, password})
     }
+
+
     return (
         <Layout>
            <div className={styles.auth}>
@@ -33,6 +43,8 @@ export default function RegisterPage() {
            <ToastContainer/>
             <form onSubmit={handleSubmit}>
             
+                <label htmlFor="username">Username</label>
+                <input type="text" id="username" value={username} onChange={(e)=> setUsername(e.target.value)}/>
                 <label htmlFor="email">Email</label>
                 <input type="email" id="email" value={email} onChange={(e)=> setEmail(e.target.value)}/>
                 <label htmlFor="Password">Password</label>
