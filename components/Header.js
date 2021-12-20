@@ -25,7 +25,7 @@ export default function Header() {
                     </li>
                     <li>
                         <Link href='/account/login'>
-                            <a className='btn-secondary'> <FaSignInAlt/> Login</a>
+                            <a className='btn-secondary btn-icon'> <FaSignInAlt/> Login</a>
                         </Link>
                     </li>
                 </ul>
