@@ -35,7 +35,8 @@ export default function ImageUpload({eventId, imageUpload}) {
             <form onSubmit={handleSubmit}>
                
                 <div className={styles.file}>
-                <input type="file" onChange={handleFileChange} />
+                    <label htmlFor="image">image</label>
+                <input id="image" type="file" onChange={handleFileChange} />
                 </div>
                 <input type="submit" value="Upload Image" className="btn" />
             </form>
