@@ -1,4 +1,4 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaUser } from "react-icons/fa"
 import Link from "next/link"
 import Layout from "@/components/Layout"
@@ -17,6 +17,9 @@ export default function RegisterPage() {
     const [confirmPassword, setConfirmPassword] = useState()
     const [username, setUsername] = useState()
 
+    useEffect(()=> error && toast.error(error.message))
+
+    
 
     const handleSubmit = (e) =>{
         e.preventDefault()
@@ -44,14 +47,14 @@ export default function RegisterPage() {
             <form onSubmit={handleSubmit}>
             
                 <label htmlFor="username">Username</label>
-                <input type="text" id="username" value={username} onChange={(e)=> setUsername(e.target.value)}/>
+                <input type="text" id="username" value={username} onChange={(e)=> setUsername(e.target.value)} />
                 <label htmlFor="email">Email</label>
-                <input type="email" id="email" value={email} onChange={(e)=> setEmail(e.target.value)}/>
+                <input type="email" id="email" value={email} onChange={(e)=> setEmail(e.target.value)} required/>
                 <label htmlFor="Password">Password</label>
-                <input type="password" id="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
+                <input type="password" id="password" value={password} onChange={(e)=>setPassword(e.target.value)} required />
                 <label htmlFor="Password">Password Confirmation</label>
-                <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} />
-                <input type="submit" value="Login" className="btn" />
+                <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)} required />
+                <input type="submit" value="Register" className="btn" />
                 <p>Already a User? <Link href='/account/login'><a> Login</a></Link></p>
 
             </form>

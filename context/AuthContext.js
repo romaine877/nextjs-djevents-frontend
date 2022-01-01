@@ -1,17 +1,37 @@
-import { NEXT_LOGIN_API_URL, NEXT_CHECK_LOGIN_API_URL } from "@/config/index";
+import { NEXT_LOGIN_API_URL, NEXT_CHECK_LOGIN_API_URL, NEXT_LOGOUT_API_URL, NEXT_REGISTRATION_API_URL } from "@/config/index";
+import { useRouter } from "next/router";
 
 const { createContext, useState, useEffect } = require("react");
 
 const AuthContext = createContext();
 
+
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
+  const router = useRouter()
   useEffect(() => checkIsLoggedIn() , []);
 
   const register = async (user) => {
-    console.table(user);
+    
+    const res = await fetch(NEXT_REGISTRATION_API_URL, {
+      method: "POST",
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+   
+    const data = await res.json()
+    if(res.ok){
+      setUser(data.user)
+      router.push('/')
+    }else{
+      setError(data)
+      setError(null)
+    }
   };
 
   const login = async ({ email: identifier, password }) => {
@@ -33,9 +53,17 @@ export const AuthProvider = ({ children }) => {
     
   };
 
-  const logout = () => {
-    setUser(null);
-    console.log("Logged out");
+  const logout = async () => {
+    const res = await fetch(NEXT_LOGOUT_API_URL, { 
+      headers:{
+        'Content-Type': 'application/json'
+      }
+    })
+    if(res.ok){
+      setUser(null);
+      console.log("Logged out");
+    }
+    
   };
 
   const checkIsLoggedIn = async () => {

@@ -13,21 +13,8 @@ export default function Modal({ show, children, title, onClose }) {
 
   useEffect(() => {
     setIsBrowser(true)
-    const user1={
-      fullName: "null name",
-      logInfo: function(){
-        console.log(this.fullName)
-      }
-    }
-    const user2={
-      fullName: "null name 2",
-      logInfo: function(){
-        console.log(this.fullName)
-      }
-    }
-
-    user1.logInfo()
-    user2.logInfo()
+   
+   
 
   });
 
