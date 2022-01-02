@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json()
     if(res.ok){
         setUser(data.user)
+        router.push('/')
     }else{
         setError(data.message)
         setError(null)
@@ -62,6 +63,7 @@ export const AuthProvider = ({ children }) => {
     if(res.ok){
       setUser(null);
       console.log("Logged out");
+      router.push('/')
     }
     
   };
@@ -77,9 +79,6 @@ export const AuthProvider = ({ children }) => {
   const data = await res.json()
   if(res.ok){
       setUser(data.user)
-  }else{
-      setError(data.message)
-      setError(null)
   }
 }
 
