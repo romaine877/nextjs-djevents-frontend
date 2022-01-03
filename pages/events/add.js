@@ -5,8 +5,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { API_URL } from "@/config/index";
 import { useRouter } from "next/router";
+import { getCookie } from "@/helpers/index";
 
-export default function AddEventPage() {
+export default function AddEventPage({token}) {
 
     const router = useRouter()
 
@@ -34,14 +35,15 @@ export default function AddEventPage() {
         const res = await fetch(`${API_URL}/events`,{
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(values)
         })
 
         if(!res.ok){
           const {message} = await res.json()
-            toast.error("Something is wrong. Error: "+ message)
+            toast.error("error")
            
         }else{
             const evt = await res.json()
@@ -154,4 +156,13 @@ export default function AddEventPage() {
       </form>
     </Layout>
   );
+}
+
+
+export async function getServerSideProps({req}){
+  const {token} = getCookie(req)
+
+  return {
+    props: {token}
+  }
 }

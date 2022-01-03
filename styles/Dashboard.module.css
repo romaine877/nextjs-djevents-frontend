@@ -1,16 +1,16 @@
 .event {
-    margin: 10px 0;
+    margin: 10px;
     padding: 10px;
     border-radius: 5px;
     border: 1px #ddd solid;
     background-color: #f4f4f4;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
   }
   
   .event h4 {
-    margin-bottom: 10px;
+    
     flex: 2;
   }
   

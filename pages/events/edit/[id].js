@@ -10,8 +10,9 @@ import { useRouter } from "next/router";
 import moment from 'moment'
 import { FaImage } from "react-icons/fa";
 import ImageUpload from "@/components/ImageUpload";
+import { getCookie } from "@/helpers/index";
 
-export default function EditEventPage({event}) {
+export default function EditEventPage({event, token}) {
 
   
     const router = useRouter()
@@ -47,14 +48,15 @@ export default function EditEventPage({event}) {
         const res = await fetch(`${API_URL}/events/${event.id}`,{
             method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
             body: JSON.stringify(values)
         })
 
         if(!res.ok){
           const {message} = await res.json()
-            toast.error("Something is wrong. Error: "+ message)
+            toast.error(message)
            
         }else{
             const evt = await res.json()
@@ -179,19 +181,20 @@ export default function EditEventPage({event}) {
         <div><button onClick={()=> setShowModal(true)} className="btn-secondary"><FaImage/> Upload Image</button></div>
       </div>
       <Modal show={showModal} onClose={()=> setShowModal(false)}>
-        <ImageUpload eventId={event.id} imageUpload={imageUpload}/>
+        <ImageUpload eventId={event.id} imageUpload={imageUpload} token={token}/>
       </Modal>
     </Layout>
   );
 }
 
 
-export async function getServerSideProps({params: {id}}){
+export async function getServerSideProps({params: {id}, req}){
   
   const res = await fetch(`${API_URL}/events/${id}`)
   const event = await res.json()
+  const {token} = getCookie(req)
   return{
-    props: {event}
+    props: {event, token}
   }
   
 }

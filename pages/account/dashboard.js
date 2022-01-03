@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 
-export default function DashboardPage({events}) {
+export default function DashboardPage({events, token}) {
 
     const router = useRouter()
 
@@ -20,6 +20,7 @@ export default function DashboardPage({events}) {
                 method: "DELETE",
                 headers: {
                   "Content-type": "application/json",
+                  Authorization: `Bearer ${token}`
                 }
               }),
               {
@@ -28,7 +29,7 @@ export default function DashboardPage({events}) {
                 error: 'error',
               },
               {
-                onClose: () => router.push('/account/dashboard'),
+                onClose: () => router.reload(),
                 autoClose: 700,
                 hideProgressBar: true,
                 position: "top-center",
@@ -68,6 +69,6 @@ export async function getServerSideProps({req}){
     })
     const events = await res.json()
     return{
-        props: {events}
+        props: {events, token}
     }
 }
