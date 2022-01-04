@@ -4,17 +4,19 @@ import { API_URL } from "@/config/index";
 import { getCookie } from "../../helpers";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import AuthContext from "@/context/AuthContext"
 import { useRouter } from "next/router";
+import { useEffect, useContext } from "react";
+
 
 export default function DashboardPage({events, token}) {
 
     const router = useRouter()
 
+    const {user} = useContext(AuthContext)
+
     const deleteItem = async (id) => {
         
-
-        
-
             const res = await toast.promise(
               fetch(`${API_URL}/events/${id}`, {
                 method: "DELETE",
@@ -43,6 +45,7 @@ export default function DashboardPage({events, token}) {
           
     }
 
+
     return (
         <Layout title="Dashboard">
             <ToastContainer/>
@@ -60,6 +63,9 @@ export default function DashboardPage({events, token}) {
 export async function getServerSideProps({req}){
 
     const {token} = getCookie(req)
+    const response = token || null
+    
+    
     
     const res = await fetch(`${API_URL}/events/me`,{
         method: 'GET',
@@ -68,6 +74,14 @@ export async function getServerSideProps({req}){
         }
     })
     const events = await res.json()
+    if(!response){
+        return{
+            redirect:{
+                destination: '/account/login',
+                permanent: false,
+            }
+        }
+    }
     return{
         props: {events, token}
     }

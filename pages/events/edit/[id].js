@@ -193,6 +193,15 @@ export async function getServerSideProps({params: {id}, req}){
   const res = await fetch(`${API_URL}/events/${id}`)
   const event = await res.json()
   const {token} = getCookie(req)
+  const response = token || null
+  if(!response){
+    return{
+      redirect:{
+        destination: '/account/login',
+        permanent: false
+      }
+    }
+  }
   return{
     props: {event, token}
   }
