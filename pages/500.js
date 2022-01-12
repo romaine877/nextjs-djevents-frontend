@@ -7,7 +7,7 @@ export default function ServerError() {
     return (
         <Layout>
             <div className={styles.error}>
-                <h1> <FaExclamationTriangle/>  %00</h1>
+                <h1> <FaExclamationTriangle/>  500</h1>
                 <h4>Internal Server Error</h4>
                 <Link href='/'>Go back home</Link>
             </div>

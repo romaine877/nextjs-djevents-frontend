@@ -160,8 +160,15 @@ export default function AddEventPage({token}) {
 
 
 export async function getServerSideProps({req}){
-  const {token} = getCookie(req)
-
+  const token = req.cookies.token
+  if(!token){
+    return{
+      redirect:{
+        destination: '/account/login',
+        permanent: false
+      }
+    }
+  }
   return {
     props: {token}
   }
